@@ -1,0 +1,13 @@
+{
+  "name": "main",
+  "main": "main.js",
+  "dependencies": {
+    "nobowerjson": "*"
+  },
+  "system": {
+  	"bowerIgnore": ["nobowerjson"],
+    "paths": {
+      "nobowerjson": "test/fakemodule/fakemodule.js"
+    }
+  }
+}

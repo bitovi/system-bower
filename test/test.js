@@ -50,6 +50,59 @@ if(System.isSteal) {
 			equal($("#qunit-test-area").html(), "Hello World", "Loaded can and rendered a template");
 		}).then(start);
 	});
+
+	QUnit.module('system-bower plugin: bowerIgnore option', {
+		setup: function() {
+			var self = this;
+			this.server = sinon.fakeServer.create();
+			this.server.autoRespond = true;
+			this.server.xhr.useFilters = true;
+			this.server.xhr.addFilter(function(method, url) {
+				return !(/.*bower_components\/nobowerjson\/bower.json/).test(url);
+			});
+			
+			this.server.respondWith(function(req){
+				self.madeRequestForBowerJSON = true;
+				var body = '{"name": "nobowerjson","version": "0.0.0","main": "whatever.js"}';
+				req.respond(200, {"Content-Type": "application/json"}, body);
+			});
+		},
+		teardown: function() {
+			this.server.restore();
+		}
+	});
+
+	asyncTest("Modules do not make requests for bower.json when module is in bowerIgnore property", function() {
+		var self = this;
+		return System.import("test/build_config/bower-with-bowerignore.json!bower").then(function() {
+			ok(!self.madeRequestForBowerJSON, "Did NOT make request for bower.json");
+		}).then(start);
+	});
+
+	QUnit.module('system-bower plugin: bowerIgnore option');
+
+	asyncTest("System loads the bowerIgnore property array", function() {
+		System.import("test/build_config/bower-with-bowerignore.json!bower").then(function() {
+			var bowerIgnore = System.bowerIgnore;
+			ok(bowerIgnore.indexOf('nobowerjson') !== -1, "bowerIgnore added");
+		}).then(start);
+	});
+
+	asyncTest("Modules do not load information when module is in bowerIgnore property", function() {
+		System.import("test/build_config/bower-with-bowerignore.json!bower").then(function() {
+			var definition = "bower_components/nobowerjson/bower.json!bower";
+			ok(!(definition in System.defined), "ignored bower component does not have it's bower.json!bower module defined");
+		}).then(start);
+	});
+
+	asyncTest("Modules can still be loaded if they are in the bowerIgnore array", function() {
+		System.import("test/build_config/bower-with-bowerignore.json!bower").then(function() {
+			return System.import('nobowerjson').then(function(nobowerjson){
+				ok(nobowerjson.loaded, "the module still loaded");
+			});
+		}).then(start, start);
+	});
+
 }
 
 QUnit.start();

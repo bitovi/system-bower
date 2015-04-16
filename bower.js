@@ -137,9 +137,12 @@ exports.translate = function(load){
 	// Get the AMD dependencies
 	var amdDeps = [];
 	for(var dep in deps) {
-		amdDeps.push(
-			bowerPath + "/" + dep + "/bower.json!bower"
-		);
+		// add a check of bower.system.bowerIgnore before pushing dep
+		if (!bower.system || !bower.system.bowerIgnore || bower.system.bowerIgnore.indexOf(dep) === -1) {
+			amdDeps.push(
+				bowerPath + "/" + dep + "/bower.json!bower"
+			);
+		}
 	}
 	// Add in the loader so these will be buildable in parallel.
 	amdDeps.unshift("@loader");
