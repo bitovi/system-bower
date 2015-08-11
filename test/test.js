@@ -29,6 +29,7 @@ asyncTest("Replaces bower_components path in paths", function(){
 
 asyncTest("system.main overrides main", function(){
 	System.bowerPath = "test";
+	System._bowerMainLoaded = false;
 	System.import("test/system_main/bower.json!bower").then(function(){
 		return System.import("system_main").then(function(m){
 			equal(m(), "second", "the system.main was used");
