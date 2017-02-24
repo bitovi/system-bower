@@ -1,5 +1,10 @@
 # system-bower
 
+DEPRECATED
+
+The bower extension was [merged](https://github.com/stealjs/steal/pull/1071) into StealJS core and this repository will no longer be maintained.
+
+--
 This is a plugin for [SystemJS](https://github.com/systemjs/systemjs) and 
 [StealJS](http://stealjs.com/) that makes it easy to work with [Bower](http://bower.io/).
 
