@@ -37,6 +37,16 @@ asyncTest("system.main overrides main", function(){
 	}).then(start);
 });
 
+asyncTest("Able to import AMD module with relative paths.", function () {
+	System.import("test/rel_path/bower.json!bower").then(function (dep) {
+		return System.import("rel_path").then(function () {
+			ok(true, "it worked");
+		});
+	}).then(start, function(err){
+		equal(err, null, "got an error");
+	});
+});
+
 QUnit.module('system-bower plugin: bowerIgnore option', {
 	setup: function() {
 		this.oldBowerPath = System.bowerPath;

@@ -1,0 +1,1 @@
+define(['./rel'], function () {})
