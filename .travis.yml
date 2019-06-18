@@ -1,11 +1,11 @@
 sudo: false
 language: node_js
 node_js:
-  - "0.10"
-before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+  - '0.10'
 before_script:
   - npm install -g grunt-cli
   - node node_modules/bower/bin/bower install
 script: npm test
+dist: xenial
+services:
+  - xvfb
